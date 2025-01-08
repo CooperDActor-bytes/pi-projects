@@ -1,0 +1,59 @@
+version: '2'
+services:
+  caddy:
+    image: rothgar/rpi-caddy:0.9.1
+    #build: caddy
+    volumes:
+      - "./.data/wp:/srv"
+    depends_on:
+      - mysql
+      - php
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+
+  php:
+    image: rothgar/rpi-php:5.6
+    #build: php
+    links:
+      # make sure you change your wp-config
+      - mysql:mysql
+    volumes:
+      - "./.data/wp:/srv"
+    restart: always
+
+  mysql:
+    image: rothgar/rpi-mysql:5.5
+    #build: mysql
+    volumes:
+      - "./.data/db:/var/lib/mysql"
+      - "./.data/backup/1n7:/docker-entrypoint-initdb.d"
+    restart: always
+    environment:
+      # Change for your existing database
+      MYSQL_ROOT_PASSWORD: wordpress
+      # below values should match wp-config
+      MYSQL_DATABASE: blog
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: PASSWORD!!!
+
+# Use these images for dynamic DDNS updates
+# For Google domains use http://j.mp/2bRNYET
+# Make sure you update WWW and @ DNS entries
+#
+#  inadyn:
+#    image: rothgar/rpi-inadyn:1.99.15
+#    environment:
+#      SYSTEM: default@domains.google.com
+#      USERNAME: UUUUU
+#      PASSWORD: PPPPP
+#      ALIAS: example.com
+#
+#  inadyn_www:
+#    image: rothgar/rpi-inadyn:1.99.15
+#    environment:
+#      SYSTEM: default@domains.google.com
+#      USERNAME: UUUUU
+#      PASSWORD: PPPPP
+#      ALIAS: www.example.com

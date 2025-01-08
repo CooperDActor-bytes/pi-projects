@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Upgrade to a different Nextcloud version
+#
+# Copyleft 2017 by Ignacio Nunez Hernanz <nacho _a_t_ ownyourbits _d_o_t_ com>
+# GPL licensed (see end of file) * Use at your own risk!
+#
+# Usage:
+#       ncp-update-nc <version>
+#
+# More at https://ownyourbits.com
+#
+
+# test cases
+####################
+# - with and without moving datadir
+# - failure at each test point
+# -> must pass basic NC in tests.py ( meaning it's not in a broken state )
+
+set -eE${DBG}
+
+BIN="${0##*/}"
+VER="$1"
+[[ "$VER" == "" ]] && { echo "Usage ${BIN} <version>"; exit 1; }
+
+connect_to_nc_update() {
+  tail -n 100 -f "/var/log/ncp-update-nc.log" &
+  tail_pid=$!
+  trap "kill '$tail_pid'" EXIT
+  while [[ "$(systemctl is-active ncp-update-nc ||:)" =~ ^(active|activating|deactivating)$ ]]
+  do
+    sleep 3
+  done
+
+  if [[ "$(systemctl is-active ncp-update-nc ||:)" == "inactive" ]]
+  then
+    echo "Nextcloud update finished successfully."
+    return 0
+  elif [[ "$(systemctl is-active ncp-update-nc ||:)" == "failed" ]]
+  then
+    echo "Nextcloud update failed (or was installed already)."
+    return 1
+  else
+    echo "Nextcloud update was not found or failed (unexpected status: '$(systemctl is-active ncp-update-nc ||:)')"
+  fi
+}
+
+if [[ "$(systemctl is-active ncp-update-nc ||:)" =~ ^(active|activating|deactivating)$ ]]
+then
+  echo "Existing ncp-update-nc process detected. Connecting..."
+  connect_to_nc_update
+  exit $?
+fi
+
+systemctl reset-failed ncp-update-nc 2>/dev/null ||:
+systemd-run -u 'ncp-update-nc' --service-type=oneshot --no-block -p TimeoutStartSec="24h" -p TimeoutStopSec="1h" \
+  bash -c "set -o pipefail; DBG='${DBG:-}' /usr/local/bin/ncp-update-nc.d/update-nc.sh '${VER}' |& tee /var/log/ncp-update-nc.log"
+sleep 1
+
+if ! [[ "$(systemctl is-active ncp-update-nc ||:)" =~ ^(active|inactive|activating|deactivating)$ ]]
+then
+  echo "Failed to start ncp-update-nc"
+  [[ -f /var/log/ncp-update-nc.log ]] && cat /var/log/ncp-update-nc.log
+  systemctl status --no-pager ncp-update-nc ||:
+  exit 1
+fi
+
+connect_to_nc_update

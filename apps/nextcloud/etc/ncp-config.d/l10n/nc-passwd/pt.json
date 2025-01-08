@@ -1,0 +1,8 @@
+{
+  "translations":{
+    "Change password for the NextcloudPi Panel":"Mudar a senha para o painel NextcloudPi",
+    "nc-passwd":"nc-senha",
+    "PASSWORD":"Senha",
+    "CONFIRM":"Confirmar"
+  }
+}

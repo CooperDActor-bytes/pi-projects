@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# notify latest available NC version
+
+set -e
+
+source /usr/local/etc/library.sh # sets NCLATESTVER
+
+CURRENT="$(nc_version)"
+NEXT_VERSION="$(determine_nc_update_version "${CURRENT}" "${NCLATESTVER?}")"
+if [[ -z "$NEXT_VERSION" ]] || [[ "$NEXT_VERSION" == "${CURRENT}" ]]
+then
+  exit 0
+fi
+
+NOTIFIED=/var/run/.nc-version-notified
+
+test -e "${NOTIFIED}" && [[ "${NEXT_VERSION}" == "$( cat "${NOTIFIED}" )" ]] && {
+  echo "Found update from ${CURRENT} to ${NEXT_VERSION}. Already notified"
+  exit 0
+}
+
+if is_more_recent_than "${NEXT_VERSION}" "${CURRENT}"; then
+  notify_admin \
+    "Nextcloud update" \
+    "Update from ${CURRENT} to ${NEXT_VERSION} is available. Update from https://$(get_ip):4443"
+  echo "${NEXT_VERSION}" > "${NOTIFIED}"
+fi

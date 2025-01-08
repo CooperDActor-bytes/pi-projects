@@ -20,7 +20,15 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/CooperDActor-bytes/ungit/refs/heads/main/install.sh | sudo bash
 
-      # Step 3: Download and De-gitrepo Repositories
+      # Step 3: Debugging GitHub Authentication
+      - name: Debug GitHub Authentication
+        run: |
+          echo "GitHub Repository: ${{ github.repository }}"
+          echo "GitHub Token: ${{ secrets.GH_TOKEN }}"
+          git remote -v
+          git config --list
+
+      # Step 4: Download and De-gitrepo Repositories
       - name: Download and De-gitrepo Repositories
         run: |
           REPOS=(
@@ -70,10 +78,10 @@ jobs:
             # Run ungit with the deinit command on the current directory
             echo "Running ungit deinit on $FOLDER"
             ungit deinit .
-            # Configure Git to use the PAT_TOKEN for authentication
+            # Configure Git to use the GITHUB_TOKEN for authentication
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"
-            git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+            git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
             # Commit and push changes if necessary
             git add .
             git commit -m "Remove Git history"
@@ -81,7 +89,7 @@ jobs:
             cd ..
           done
 
-      # Step 4: Clean up if necessary
+      # Step 5: Clean up if necessary
       # - name: Clean up
       #   run: |
       #     rm -rf ungit.tar.gz

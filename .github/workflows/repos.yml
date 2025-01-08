@@ -74,10 +74,10 @@ jobs:
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"
             git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-            # Commit and push changes if necessary
+            # Commit and push changes
             git add .
             git commit -m "Remove Git history"
-            git push origin main
+            git push origin main --force
             cd ..
           done
 

@@ -67,9 +67,9 @@ jobs:
             echo "Cloning repository: $REPO into folder $FOLDER"
             git clone $REPO $FOLDER
             cd $FOLDER
-            # Run ungit to de-gitrepo one at a time
-            echo "Running ungit on $FOLDER"
-            ungit
+            # Run ungit with the deinit command to remove Git history
+            echo "Running ungit deinit on $FOLDER"
+            ungit deinit
             # Configure Git to use the GITHUB_TOKEN for authentication
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"

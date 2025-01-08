@@ -73,7 +73,7 @@ jobs:
             # Configure Git to use the GITHUB_TOKEN for authentication
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"
-            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
             # Commit and push changes if necessary
             git add .
             git commit -m "Remove Git history"

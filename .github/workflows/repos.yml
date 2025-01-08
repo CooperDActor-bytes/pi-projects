@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: "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" # Set your PAT here
+      GH_TOKEN: "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"  # Directly input your PAT here for testing
 
     steps:
       # Step 1: Check out the repo for the GitHub Actions workflow
@@ -63,6 +63,7 @@ jobs:
             "ungit"
           )
 
+          # Loop through each repository and perform operations
           for i in "${!REPOS[@]}"
           do
             REPO=${REPOS[$i]}
@@ -70,16 +71,25 @@ jobs:
             echo "Cloning repository: $REPO into folder $FOLDER"
             git clone $REPO $FOLDER
             cd $FOLDER
-            # Run ungit with the deinit command on the current directory
+            
+            # Run ungit deinit on the current repository
             echo "Running ungit deinit on $FOLDER"
             ungit deinit .
+            
             # Configure Git to use the GH_TOKEN for authentication
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"
             git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
-            # Commit and push changes if necessary
+            
+            # Commit and push changes (if necessary)
             git add .
             git commit -m "Remove Git history"
             git push origin main
+            
             cd ..
           done
+
+      # Step 4: Clean up if necessary
+      # - name: Clean up
+      #   run: |
+      #     rm -rf ungit.tar.gz

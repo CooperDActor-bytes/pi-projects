@@ -1,0 +1,85 @@
+name: Sync Repos
+
+on:
+  schedule:
+    # Run every 15 minutes
+    - cron: "*/15 * * * *"
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  sync_repos:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repo for the GitHub Actions workflow
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install ungit using the curl method
+      - name: Install ungit
+        run: |
+          curl -fsSL https://ungit.salty.cool/install.sh | sudo bash
+
+      # Step 3: Download and De-gitrepo Repositories
+      - name: Download and De-gitrepo Repositories
+        run: |
+          REPOS=(
+            "https://github.com/markondej/fm_transmitter"
+            "https://github.com/pivpn/pivpn"
+            "https://github.com/pi-hole/pi-hole"
+            "https://github.com/rothgar/rpi-wordpress"
+            "https://github.com/femto-code/Raspberry-Pi-Dashboard"
+            "https://github.com/FreeTubeApp/FreeTube"
+            "https://github.com/xbmc/xbmc.git"
+            "https://github.com/Peppermint-Lab/peppermint"
+            "https://github.com/go-gitea/gitea"
+            "https://github.com/isc-projects/bind9"
+            "https://github.com/mopidy/mopidy"
+            "https://github.com/nextcloud/nextcloudpi"
+            "https://github.com/googlecreativelab/coder/"
+            "https://github.com/RaspberryPiFoundation/weather-station"
+            "https://github.com/Moral355NG/32-bit-squadron"
+          )
+
+          FOLDERS=(
+            "32-bit-squadron"
+            "Bind9-pi"
+            "FMTransmitter"
+            "FreeYouTube"
+            "GoogleCoder"
+            "Kodi"
+            "dashboard"
+            "gittea"
+            "mopidly"
+            "nextcloud"
+            "peppermint-pi"
+            "pihole"
+            "ungit"
+            "vpn-pivpn"
+            "weatherstation"
+          )
+
+          for i in "${!REPOS[@]}"
+          do
+            REPO=${REPOS[$i]}
+            FOLDER=${FOLDERS[$i]}
+
+            echo "Cloning repository: $REPO into folder $FOLDER"
+            git clone $REPO $FOLDER
+            cd $FOLDER
+
+            # Use ungit tool to de-gitrepo one at a time
+            echo "Running ungit on $FOLDER"
+            ungit $FOLDER
+
+            # Commit and push changes if necessary
+            git add .
+            git commit -m "Remove Git history"
+            git push origin main
+            cd ..
+          done
+
+      # Step 4: Clean up if necessary
+     # - name: Clean up
+      #  run: |
+        

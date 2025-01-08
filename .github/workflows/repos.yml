@@ -18,7 +18,7 @@ jobs:
       # Step 2: Install ungit using the curl method
       - name: Install ungit
         run: |
-          curl -fsSL https://ungit.salty.cool/install.sh | sudo bash
+          curl -fsSL https://raw.githubusercontent.com/CooperDActor-bytes/ungit/refs/heads/main/install.sh | sudo bash
 
       # Step 3: Download and De-gitrepo Repositories
       - name: Download and De-gitrepo Repositories
@@ -39,24 +39,26 @@ jobs:
             "https://github.com/googlecreativelab/coder/"
             "https://github.com/RaspberryPiFoundation/weather-station"
             "https://github.com/Moral355NG/32-bit-squadron"
+            "https://github.com/CooperDActor-bytes/ungit"
           )
 
           FOLDERS=(
-            "32-bit-squadron"
-            "Bind9-pi"
             "FMTransmitter"
-            "FreeYouTube"
-            "GoogleCoder"
-            "Kodi"
+            "vpn-pivpn"
+            "pihole"
+            "wp"
             "dashboard"
+            "FreeYouTube"
+            "Kodi"
+            "peppermint-pi"
             "gittea"
+            "Bind9-pi"
             "mopidly"
             "nextcloud"
-            "peppermint-pi"
-            "pihole"
-            "ungit"
-            "vpn-pivpn"
+            "GoogleCoder"
             "weatherstation"
+            "32-bit-squadron"
+            "ungit"
           )
 
           for i in "${!REPOS[@]}"

@@ -75,9 +75,10 @@ jobs:
             # Run ungit with the deinit command on the current directory
             echo "Running ungit deinit on $FOLDER"
             ungit deinit .
-            # Commit changes locally without pushing
+            # Commit changes locally
             git add .
-            git commit -m "updates"
-            # If you don't want to push, just stop here
+            git commit -m "Remove Git history"
+            # Push changes using default HTTPS (public repository)
+            git push origin main
             cd ..
           done

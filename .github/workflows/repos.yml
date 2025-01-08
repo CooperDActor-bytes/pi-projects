@@ -70,14 +70,14 @@ jobs:
             # Run ungit with the deinit command on the current directory
             echo "Running ungit deinit on $FOLDER"
             ungit deinit .
-            # Configure Git to use the GITHUB_TOKEN for authentication
+            # Configure Git to use the PAT_TOKEN for authentication
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"
-            git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-            # Commit and push changes
+            git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
+            # Commit and push changes if necessary
             git add .
             git commit -m "Remove Git history"
-            git push origin main --force
+            git push origin main
             cd ..
           done
 

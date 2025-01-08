@@ -20,7 +20,13 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/CooperDActor-bytes/ungit/refs/heads/main/install.sh | sudo bash
 
-      # Step 3: Download and De-gitrepo Repositories
+      # Step 3: Set up Git user for commits
+      - name: Set up Git user
+        run: |
+          git config --global user.email "cooper@salty.cool"  # Your email
+          git config --global user.name "CooperDActor-bytes"  # Your username
+
+      # Step 4: Download and De-gitrepo Repositories
       - name: Download and De-gitrepo Repositories
         run: |
           REPOS=(
@@ -71,7 +77,7 @@ jobs:
             ungit deinit .
             # Commit changes locally without pushing
             git add .
-            git commit -m "Remove Git history"
+            git commit -m "updates"
             # If you don't want to push, just stop here
             cd ..
           done

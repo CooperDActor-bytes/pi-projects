@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: "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" # Set your PAT here
+      GH_TOKEN: "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" # Set your PAT here
 
     steps:
       # Step 1: Check out the repo for the GitHub Actions workflow

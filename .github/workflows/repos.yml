@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Reference the stored token secret
+      GH_TOKEN: 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  # Reference the stored token secret
 
     steps:
       # Step 1: Check out the repo for the GitHub Actions workflow
@@ -23,10 +23,10 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/CooperDActor-bytes/ungit/refs/heads/main/install.sh | sudo bash
 
-# Step 3: Download and De-gitrepo Repositories
-- name: Download and De-gitrepo Repositories
-  run: |
-    REPOS=(
+        # Step 3: Download and De-gitrepo Repositories
+        - name: Download and De-gitrepo Repositories
+          run: |
+            REPOS=(
       "https://github.com/markondej/fm_transmitter"
       "https://github.com/pivpn/pivpn"
       "https://github.com/pi-hole/pi-hole"
@@ -52,7 +52,7 @@ jobs:
       git config --global user.email "cooper@salty.cool"
       git config --global user.name "CooperDActor-bytes"
       # Set the remote URL to use the GH_TOKEN
-      git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/CooperDActor-bytes/pi-projects.git
+      git remote set-url origin https://x-access-token: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@github.com/CooperDActor-bytes/pi-projects.git
       # Commit and push changes if necessary
       git add .
       git commit -m "Remove Git history"

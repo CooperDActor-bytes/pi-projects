@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GH_TOKEN: "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" # Replace with your actual PAT if testing locally
+      GH_TOKEN: "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" # Replace with your actual PAT if testing locally
 
     steps:
       # Step 1: Check out the repository for the GitHub Actions workflow
@@ -76,7 +76,7 @@ jobs:
             git config --global user.email "cooper@salty.cool"
             git config --global user.name "CooperDActor-bytes"
             # Set the remote URL to use the GH_TOKEN
-            git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/CooperDActor-bytes/pi-projects.git
+            git remote set-url origin https://x-access-token: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@github.com/CooperDActor-bytes/pi-projects.git
             # Commit and push changes if necessary
             git add .
             git commit -m "Remove Git history"

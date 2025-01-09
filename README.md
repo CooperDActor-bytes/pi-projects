@@ -6,7 +6,7 @@
 
 use this!
 
-`
+```
 sudo bash install.sh
-`
-Its That Easy!
+```
+
